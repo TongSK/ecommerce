@@ -154,7 +154,6 @@ session_start();
                             </tr>
                         </thead>
                         <?php
-                        if(!empty($_SESSION['cart']) ){
                         foreach ($_SESSION['cart'] as $item) {
                         ?>
                             <tbody>
@@ -168,33 +167,27 @@ session_start();
                                         <a href="product-left-sidebar.html"><?php echo $item['name']; ?></a>
                                     </td>
                                     <td>
-                                        <h2 name="price"><?php echo $item['price']; ?></h2>
+                                        <h2><?php echo $item['price']; ?></h2>
                                     </td>
                                     <td>
-                                        <form>
                                         <div class="qty-box">
                                             <div class="input-group">
-                                                <input type="number" id="quantity" name="quantity" class="form-control input-number" onchange="updateQuantity(this.value,<?php echo $item['id'];?>)" value="<?php echo $item['quantity']; ?>">
-                                                <?php $string = json_encode($_SESSION);
-    echo $string;?>
+                                                <input type="number" name="quantity" class="form-control input-number" value="<?php echo $item['quantity']; ?>">
                                                 <!-- <button type="button" class="btn m-1 btn-secondary">Update</button> -->
-                                                
                                             </div>
                                         </div>
-                                        </form>
                                     </td>
                                     <td>
-                                        <a href="add_to_cart.php?delete-item=<?php echo $item['id'];?>" name="delete-item">
+                                        <a href="javascript:void(0)">
                                             <i class="fas fa-times"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <h2 class="td-color" name="total"><?php echo '$ ', $item['price'] * $item['quantity']; ?></h2>
+                                        <h2 class="td-color"><?php echo '$ ', $item['price'] * $item['quantity']; ?></h2>
                                     </td>
                                 </tr>
                             </tbody>
                         <?php }; ?>
-                        <?php }?>
                     </table>
                 </div>
 
