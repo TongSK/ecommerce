@@ -131,13 +131,16 @@ session_start();
 
                     $total = 0;
                     $total_qty = 0;
-
-                    foreach ($_SESSION['cart'] as $item) {
-                        $subtotal = $item['price'] * $item['quantity'];
-                        $total_qty += $item['quantity'];
-                        $total += $subtotal;
+                    if(!empty($_SESSION['cart']) ){
+                        foreach ($_SESSION['cart'] as $item) {
+                            
+                                $subtotal = $item['price'] * $item['quantity'];
+                                $total_qty += $item['quantity'];
+                                $total += $subtotal;
+                            
+                            
+                        }
                     }
-
                     ?>
                     <table class="table cart-table">
                         <thead>
@@ -151,6 +154,7 @@ session_start();
                             </tr>
                         </thead>
                         <?php
+                        if(!empty($_SESSION['cart']) ){
                         foreach ($_SESSION['cart'] as $item) {
                         ?>
                             <tbody>
@@ -164,27 +168,33 @@ session_start();
                                         <a href="product-left-sidebar.html"><?php echo $item['name']; ?></a>
                                     </td>
                                     <td>
-                                        <h2><?php echo $item['price']; ?></h2>
+                                        <h2 name="price"><?php echo $item['price']; ?></h2>
                                     </td>
                                     <td>
+                                        <form>
                                         <div class="qty-box">
                                             <div class="input-group">
-                                                <input type="number" name="quantity" class="form-control input-number" value="<?php echo $item['quantity']; ?>">
+                                                <input type="number" id="quantity" name="quantity" class="form-control input-number" onchange="updateQuantity(this.value,<?php echo $item['id'];?>)" value="<?php echo $item['quantity']; ?>">
+                                                <?php $string = json_encode($_SESSION);
+    echo $string;?>
                                                 <!-- <button type="button" class="btn m-1 btn-secondary">Update</button> -->
+                                                
                                             </div>
                                         </div>
+                                        </form>
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0)">
+                                        <a href="add_to_cart.php?delete-item=<?php echo $item['id'];?>" name="delete-item">
                                             <i class="fas fa-times"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <h2 class="td-color"><?php echo '$ ', $item['price'] * $item['quantity']; ?></h2>
+                                        <h2 class="td-color" name="total"><?php echo '$ ', $item['price'] * $item['quantity']; ?></h2>
                                     </td>
                                 </tr>
                             </tbody>
                         <?php }; ?>
+                        <?php }?>
                     </table>
                 </div>
 
@@ -192,7 +202,7 @@ session_start();
                     <div class="row">
                         <div class="col-sm-7 col-5 order-1">
                             <div class="left-side-button text-end d-flex d-block justify-content-end">
-                                <a href="javascript:void(0)" class="text-decoration-underline theme-color d-block text-capitalize">clear
+                                <a href="add_to_cart.php?delete-all-item" class="text-decoration-underline theme-color d-block text-capitalize">clear
                                     all items</a>
                             </div>
                         </div>
@@ -435,6 +445,27 @@ session_start();
     <!-- script js -->
     <script src="assets/js/theme-setting.js"></script>
     <script src="assets/js/script.js"></script>
+
+    <script>
+        function updateQuantity(quantity, id){
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'add_to_cart.php', true);
+            xhr.setRequestHeader('Content-Type','application/x-www-form-data');
+
+            var data = new FormData();
+            data.append('id',id);
+            data.append('newQty', quantity);
+            
+            xhr.onload = function(){
+                if(xhr.status === 200){
+                    alert("nicee");
+                }else{
+                    alert("nooo");
+                }
+            };
+            xhr.send(data);
+        }
+    </script>
 </body>
 
 </html>
